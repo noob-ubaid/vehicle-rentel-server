@@ -7,7 +7,7 @@ const createVehicles = async (req: Request, res: Response) => {
     return res.status(200).json({
       success: true,
       message: "Vehicles created successfully",
-      data: result,
+      data: result.rows[0],
     });
   } catch (error: any) {
     res.status(500).json({
@@ -16,6 +16,22 @@ const createVehicles = async (req: Request, res: Response) => {
     });
   }
 };
+const getAllVehicles = async(req: Request, res: Response) => {
+    try {
+        const result = await vehiclesService.getAllVehicles()
+        return res.status(200).json({
+      success: true,
+      message: "Vehicles created successfully",
+      data: result.rows,
+    });
+    } catch (error:any) {
+        res.status(500).json({
+      success: false,
+      message: error.message,
+    }); 
+    }
+}
 export const vehiclesController = {
   createVehicles,
+  getAllVehicles
 };
