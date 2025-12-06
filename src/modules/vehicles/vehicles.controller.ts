@@ -55,8 +55,29 @@ const getSingleVehicle = async (req: Request, res: Response) => {
     });
   }
 };
+
+const updateSingleVehicle = async (req: Request, res: Response) => {
+  const { vehicleId } = req.params;
+  try {
+    const result = await vehiclesService.updateSingleVehicle(
+      vehicleId as string,
+      req.body
+    );
+    res.status(200).json({
+      success: false,
+      message: "Vehicle updated successfully",
+      data:result.rows[0]
+    })
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 export const vehiclesController = {
   createVehicles,
   getAllVehicles,
   getSingleVehicle,
+  updateSingleVehicle,
 };

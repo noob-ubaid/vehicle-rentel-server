@@ -28,13 +28,37 @@ const getAllVehicles = async () => {
 };
 
 const getSingleVehicle = async (id: string) => {
-  const result = await pool.query(`SELECT * FROM vehicles WHERE id = $1`, [
-    id,
-  ]);
+  const result = await pool.query(`SELECT * FROM vehicles WHERE id = $1`, [id]);
+  return result;
+};
+
+const updateSingleVehicle = async (
+  id: string,
+  payload: Record<string, unknown>
+) => {
+  const {
+    vehicle_name,
+    type,
+    registration_number,
+    daily_rent_price,
+    availability_status,
+  } = payload;
+  const result = await pool.query(
+    `UPDATE vehicles SET vehicle_name=$1,type=$2,registration_number=$3,daily_rent_price=$4,availability_status=$5 WHERE id=$6 RETURNING *`,
+    [
+      vehicle_name,
+      type,
+      registration_number,
+      daily_rent_price,
+      availability_status,
+      id
+    ]
+  );
   return result
 };
 export const vehiclesService = {
   createVehicles,
   getAllVehicles,
-  getSingleVehicle
+  getSingleVehicle,
+  updateSingleVehicle
 };
