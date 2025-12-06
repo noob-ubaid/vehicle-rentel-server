@@ -21,8 +21,14 @@ const loginUser = async (email: string, password: string) => {
       expiresIn: "7d",
     }
   );
-  console.log(token, user);
-  return { token, user };
+  const secureUser = {
+    id:user.id,
+    name: user.name,
+    email: user.email,
+    phone:user.phone,
+    role: user.role,
+  };
+  return { token, user:secureUser };
 };
 
 const createUser = async (payload: Record<string, unknown>) => {
