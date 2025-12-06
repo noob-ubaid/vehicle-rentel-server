@@ -19,14 +19,22 @@ const createVehicles = async (payload: Record<string, unknown>) => {
       availability_status,
     ]
   );
-  return result
+  return result;
 };
 
-const getAllVehicles = async() =>{
-    const result = await pool.query(`SELECT * FROM vehicles`)
-    return result
-}
+const getAllVehicles = async () => {
+  const result = await pool.query(`SELECT * FROM vehicles`);
+  return result;
+};
+
+const getSingleVehicle = async (id: string) => {
+  const result = await pool.query(`SELECT * FROM vehicles WHERE id = $1`, [
+    id,
+  ]);
+  return result
+};
 export const vehiclesService = {
-    createVehicles,
-    getAllVehicles
-}
+  createVehicles,
+  getAllVehicles,
+  getSingleVehicle
+};
