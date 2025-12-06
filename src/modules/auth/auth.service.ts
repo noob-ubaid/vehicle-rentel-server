@@ -2,7 +2,7 @@ import { pool } from "../../config/db";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import config from "../../config";
-const createUser = async (email: string, password: string) => {
+const loginUser = async (email: string, password: string) => {
   const result = await pool.query(`SELECT * FROM users WHERE email=$1`, [
     email,
   ]);
@@ -21,10 +21,23 @@ const createUser = async (email: string, password: string) => {
       expiresIn: "7d",
     }
   );
-  console.log(token,user)
+  console.log(token, user);
   return { token, user };
 };
 
+const createUser = async (payload: Record<string, unknown>) => {
+  const { name, email, password, role } = payload;
+  const hashedPassword = await bcrypt.hash(password as string, 10);
+  const result = await pool.query(
+    `
+    INSERT INTO users(name,email,password,role) VALUES($1,$2,$3,$4) RETURNING * 
+    `,
+    [name, email, hashedPassword, role]
+  );
+  return result;
+};
+
 export const authServices = {
+  loginUser,
   createUser,
 };
