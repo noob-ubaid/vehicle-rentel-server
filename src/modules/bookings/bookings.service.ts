@@ -103,7 +103,6 @@ const updateBooking = async (
   }
 
   if (role === "admin") {
-    // Admin marks as returned
     await pool.query(`UPDATE bookings SET status='returned' WHERE id=$1`, [
       bookingId,
     ]);
