@@ -28,7 +28,7 @@ const initDB = async () => {
     )
   `);
   await pool.query(`
-     CREATE TABLE IF NOT EXISTS bookings (
+    CREATE TABLE IF NOT EXISTS bookings (
     id SERIAL PRIMARY KEY,
     customer_id INTEGER NOT NULL REFERENCES users(id),
     vehicle_id INTEGER NOT NULL REFERENCES vehicles(id),
