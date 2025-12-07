@@ -26,7 +26,6 @@ export const auth = (...roles: string[]) => {
           message: "Forbidden! You do not have permission.",
         });
       }
-
       next();
     } catch (error) {
       res.status(401).json({

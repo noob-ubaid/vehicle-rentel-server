@@ -16,7 +16,9 @@ const createBookings = async (payload: Record<string, any>) => {
 
   const start = new Date(rent_start_date);
   const end = new Date(rent_end_date);
-  const days = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+  const days = Math.ceil(
+    (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)
+  );
 
   const total_price = vehicle.daily_rent_price * days;
 
@@ -53,6 +55,23 @@ const createBookings = async (payload: Record<string, any>) => {
   };
 };
 
+const getBookings = async (role: string, id: string) => {
+  if (role === "admin") {
+    const result = await pool.query(`
+      SELECT * FROM bookings
+        `);
+    return result.rows;
+  } else {
+    const result = await pool.query(
+      `
+        SELECT * FROM bookings WHERE customer_id = $1 ORDER BY id DESC
+        `,
+      [id]
+    );
+    return result.rows;
+  }
+};
 export const bookingsService = {
   createBookings,
+  getBookings,
 };
