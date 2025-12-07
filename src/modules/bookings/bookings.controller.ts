@@ -23,7 +23,7 @@ const getBookings = async (req: Request, res: Response) => {
       req?.user?.role as string,
       req?.user?.id as string
     );
-     res.status(201).json({
+    res.status(201).json({
       success: true,
       message: "All bookings",
       data: result,
@@ -35,7 +35,25 @@ const getBookings = async (req: Request, res: Response) => {
     });
   }
 };
+
+const updateBooking = async (req: Request, res: Response) => {
+  try {
+    const bookingId = Number(req.params.bookingId);
+    const role = req.user?.role as string;
+    const userId = Number(req.user?.id);
+
+    const result = await bookingsService.updateBooking(bookingId, role, userId);
+    res.status(200).json({
+      success: true,
+      message: "Booking updated successfully",
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
 export const bookingsController = {
   createBookings,
-  getBookings
+  getBookings,
+  updateBooking,
 };
