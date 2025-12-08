@@ -51,14 +51,40 @@ const updateSingleVehicle = async (
       registration_number,
       daily_rent_price,
       availability_status,
-      id
+      id,
     ]
   );
-  return result
+  return result;
+};
+
+const deleteVehicles = async (id: string) => {
+  const checkVehicle = await pool.query(
+    `SELECT * FROM vehicles WHERE id = $1`,
+    [id]
+  );
+
+  if (checkVehicle.rows.length === 0) {
+    throw new Error("Vehicle not found");
+  }
+
+  const checkBooking = await pool.query(
+    `SELECT * FROM bookings 
+     WHERE vehicle_id = $1 AND status = 'active'`,
+    [id]
+  );
+
+  if (checkBooking.rows.length > 0) {
+    throw new Error("Cannot delete vehicle. Active bookings exist.");
+  }
+
+  await pool.query(`DELETE FROM vehicles WHERE id = $1`, [id]);
+
+  return { message: "Vehicle deleted successfully" };
 };
 export const vehiclesService = {
   createVehicles,
   getAllVehicles,
   getSingleVehicle,
-  updateSingleVehicle
+  updateSingleVehicle,
+  deleteVehicles,
 };

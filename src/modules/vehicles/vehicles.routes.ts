@@ -7,4 +7,5 @@ router.post("/",auth("admin"),vehiclesController.createVehicles)
 router.get("/" ,vehiclesController.getAllVehicles)
 router.get("/:vehicleId",vehiclesController.getSingleVehicle)
 router.put("/:vehicleId",auth("admin"),vehiclesController.updateSingleVehicle)
+router.delete("/:vehicleId",auth("admin"),vehiclesController.deleteVehicles)
 export const vehiclesRoutes = router
